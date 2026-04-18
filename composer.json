@@ -1,0 +1,47 @@
+{
+  "name": "derteaser/kirby-testing",
+  "description": "Fluent HTTP + DOM test assertions for Kirby 5 projects using Pest/PHPUnit.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jens Kuesters",
+      "email": "jens@kuesters.net"
+    }
+  ],
+  "require": {
+    "php": "~8.4.0",
+    "ext-dom": "*",
+    "ext-libxml": "*",
+    "getkirby/cms": "^5.1",
+    "phpunit/phpunit": "^11.0 || ^12.0",
+    "symfony/dom-crawler": "^7.0",
+    "symfony/css-selector": "^7.0"
+  },
+  "require-dev": {
+    "pestphp/pest": "^4.0"
+  },
+  "suggest": {
+    "loupe/loupe": "Enables the InteractsWithLoupe trait for fixture-backed search indexes (^0.13)."
+  },
+  "autoload": {
+    "psr-4": {
+      "Derteaser\\KirbyTesting\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Derteaser\\KirbyTesting\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true,
+      "getkirby/composer-installer": true
+    },
+    "sort-packages": true
+  },
+  "scripts": {
+    "test": "pest"
+  }
+}

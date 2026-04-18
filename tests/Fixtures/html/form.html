@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <body>
+    <form action="/Contact/" method="post" class="form narrow">
+      <input type="hidden" name="_token" value="tok-123" />
+      <input type="hidden" name="_method" value="PATCH" />
+
+      <label>
+        Name
+        <input type="text" name="name" required />
+      </label>
+
+      <label>
+        Flavor
+        <select name="flavor">
+          <optgroup label="Fruit">
+            <option value="apple" selected="selected">Apple</option>
+            <option value="banana">Banana</option>
+          </optgroup>
+          <optgroup label="Dessert">
+            <option value="cake">Cake</option>
+          </optgroup>
+        </select>
+      </label>
+
+      <label>
+        Color
+        <input list="colors" name="color" />
+        <datalist id="colors">
+          <option value="red">Red</option>
+          <option value="green">Green</option>
+          <option value="blue">Blue</option>
+        </datalist>
+      </label>
+
+      <textarea name="notes">hello there</textarea>
+
+      <button type="submit">Send</button>
+    </form>
+  </body>
+</html>
