@@ -71,7 +71,7 @@ it('renders the home page', function () {
 
 ## Opt-in concerns
 
-- `InteractsWithBlade` — primes Laravel's `__components` namespace so inline Blade components render under `pest --parallel`. No-op if `illuminate/container` isn't present.
+- `InteractsWithBlade` — clears Laravel's facade instance cache before each new Kirby App and primes the `__components` namespace after, so custom Blade directives registered per-App survive multiple boots and inline Blade components render under `pest --parallel`. No-op if the Illuminate classes aren't loaded.
 - `InteractsWithLoupe` — static-cached search index via a factory closure registered from `Pest.php`. Requires `loupe/loupe` at the consumer side.
 - `SuppressesExifWarnings` — swallows `exif_read_data: File not supported` warnings that Kirby emits when probing non-JPEG fixtures. Delegates other warnings to the previous handler.
 
