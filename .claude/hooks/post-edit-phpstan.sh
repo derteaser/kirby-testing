@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
-# PostToolUse hook: run PHPStan after edits inside src/.
+# PostToolUse hook: run PHPStan when src/**.php is edited.
 #
-# Strategy: analyse the whole project (PHPStan's per-file cache makes this
-# fast on incremental edits) using the project's phpstan.neon.dist config.
-# If errors are found, emit them to stderr with exit code 2 so Claude sees
-# the failure and can fix it before moving on.
+# Scope note: the *trigger* is src/ edits only, but the analysis itself runs
+# against the whole project as configured in phpstan.neon.dist (both `src/`
+# and `tests/`). This is intentional — tests are at level 8 too, and
+# cross-file issues between src and tests get caught. PHPStan's per-file
+# result cache keeps incremental runs fast.
+#
+# Errors go to stderr with exit code 2 so Claude sees the failure and can
+# fix it before moving on.
 
 set -uo pipefail
 
 payload=$(cat)
-file=$(printf '%s' "$payload" | jq -r '.tool_input.file_path // empty')
+
+command -v jq >/dev/null 2>&1 || exit 0
+
+file=$(printf '%s' "$payload" | jq -r '.tool_input.file_path // empty' 2>/dev/null || printf '')
 
 [[ -z "$file" ]] && exit 0
 [[ "$file" == *.php ]] || exit 0

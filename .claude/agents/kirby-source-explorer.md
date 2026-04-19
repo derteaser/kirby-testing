@@ -17,7 +17,7 @@ Kirby's `getkirby/composer-installer` places the framework at the **project root
 - `kirby/src/Filesystem/`, `kirby/src/Image/`, `kirby/src/Toolkit/` — support layers
 - `kirby/CHANGELOG.md` — version history (useful for "since when is X available")
 
-Search **first** in `kirby/src/`. Only fall back to `vendor/getkirby/` if that directory doesn't exist in this project.
+Search **first** in `kirby/src/`. Only fall back to `vendor/getkirby/cms/` if that directory doesn't exist in this project.
 
 ## How to answer
 

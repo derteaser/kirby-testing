@@ -9,7 +9,12 @@
 set -euo pipefail
 
 payload=$(cat)
-file=$(printf '%s' "$payload" | jq -r '.tool_input.file_path // empty')
+
+# jq is the only external dependency. Silently skip if it's not installed —
+# hooks must never block a session on missing optional tooling.
+command -v jq >/dev/null 2>&1 || exit 0
+
+file=$(printf '%s' "$payload" | jq -r '.tool_input.file_path // empty' 2>/dev/null || printf '')
 
 # No path, nothing to do.
 [[ -z "$file" ]] && exit 0
