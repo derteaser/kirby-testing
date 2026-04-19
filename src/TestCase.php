@@ -22,6 +22,8 @@ use RuntimeException;
  * props — no Apache, no front controller.
  *
  * Extension points for opt-in traits (e.g. InteractsWithBlade):
+ *   - beforeApplicationCreation(array $props): called right before `new App(...)`,
+ *     with the merged props the App is about to be constructed with
  *   - afterApplicationCreated(App $app): called at the end of createApplication()
  */
 abstract class TestCase extends BaseTestCase
@@ -41,6 +43,8 @@ abstract class TestCase extends BaseTestCase
     public function createApplication(array $props = []): App
     {
         $props['roots'] = ($props['roots'] ?? []) + $this->roots($this->parallelCacheSuffix());
+
+        $this->beforeApplicationCreation($props);
 
         $app = new App($props);
 
@@ -69,6 +73,18 @@ abstract class TestCase extends BaseTestCase
         $token = getenv('TEST_TOKEN');
 
         return is_string($token) && ctype_digit($token) ? '/parallel/' . $token : '';
+    }
+
+    /**
+     * Hook fired immediately before `new App(...)` in every `createApplication()`
+     * call, with the fully-merged props array the App is about to receive.
+     * Default: no-op. Opt-in traits (e.g. InteractsWithBlade) override this.
+     *
+     * @param  array<string, mixed>  $props
+     */
+    protected function beforeApplicationCreation(array $props): void
+    {
+        // no-op
     }
 
     /**

@@ -24,12 +24,12 @@ vendor/bin/pest --filter="hyphenates"              # Single test by description
 
 ### `src/` (PSR-4: `Derteaser\KirbyTesting\`)
 
-- **`TestCase.php`** — Abstract base. Subclasses override `roots(string $cacheSuffix): array`. `afterApplicationCreated(App $app)` is the extension hook opt-in traits plug into.
+- **`TestCase.php`** — Abstract base. Subclasses override `roots(string $cacheSuffix): array`. Two extension hooks that opt-in traits plug into: `beforeApplicationCreation(array $props)` (fires before `new App(...)`, receives the merged props) and `afterApplicationCreated(App $app)` (fires after).
 - **`TestResponse.php`** — Wraps `Kirby\Cms\Response` + `Kirby\Http\Request`. Deliberately does not depend on `Kirby\Toolkit\*` or `illuminate/support` — uses vanilla PHP (`is_array`, `htmlspecialchars`) so the surface stays small.
 - **`TestResponseAssert.php`** — Decorates PHPUnit failures with context from the logged exceptions on the response.
 - **`Concerns/`** — Opt-in traits consumers mix into their `TestCase`:
   - `AssertsStatusCodes` / `AssertsDom` — Always on (used by `TestResponse`).
-  - `InteractsWithBlade` — Primes Laravel's `__components` namespace for parallel testing. No-op if `illuminate/container` isn't present.
+  - `InteractsWithBlade` — Clears Laravel's facade resolved-instance cache before each App boot (so per-App Blade directive registration via `Blade::directive()` / `Blade::if()` actually lands on the current BladeCompiler) and primes Laravel's `__components` namespace after, for parallel testing. No-ops if the Illuminate classes aren't loaded.
   - `InteractsWithLoupe` — Static-cached search index via a consumer-registered factory. Throws if no factory set.
   - `SuppressesExifWarnings` — Swallows `exif_read_data: File not supported` warnings.
 - **`Constraints/SeeInOrder.php`** — PHPUnit constraint used by `TestResponse::assertSeeInOrder`.
