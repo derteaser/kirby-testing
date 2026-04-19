@@ -8,7 +8,10 @@ use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Cms\Pages;
 use Kirby\Cms\Site;
+use Kirby\Http\Request;
+use Kirby\Http\Response;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use RuntimeException;
 
 /**
  * Base test case for feature-style tests against a Kirby 5 project.
@@ -32,6 +35,9 @@ abstract class TestCase extends BaseTestCase
         $this->app = $this->createApplication();
     }
 
+    /**
+     * @param  array<string, mixed>  $props
+     */
     public function createApplication(array $props = []): App
     {
         $props['roots'] = ($props['roots'] ?? []) + $this->roots($this->parallelCacheSuffix());
@@ -84,36 +90,62 @@ abstract class TestCase extends BaseTestCase
         return $this->app->page($id, $parent, $drafts);
     }
 
+    /**
+     * @return Pages<Page>
+     */
     public function pages(): Pages
     {
         return $this->app->site()->pages();
     }
 
+    /**
+     * @param  array<string, mixed>  $parameters
+     */
     public function get(string $uri, array $parameters = []): TestResponse
     {
         return $this->call('GET', $uri, $parameters);
     }
 
+    /**
+     * @param  array<string, mixed>  $parameters
+     * @param  array<string, mixed>  $files
+     */
     public function post(string $uri, array $parameters = [], array $files = [], ?string $content = null): TestResponse
     {
         return $this->call('POST', $uri, $parameters, $files, $content);
     }
 
+    /**
+     * @param  array<string, mixed>  $parameters
+     * @param  array<string, mixed>  $files
+     */
     public function put(string $uri, array $parameters = [], array $files = [], ?string $content = null): TestResponse
     {
         return $this->call('PUT', $uri, $parameters, $files, $content);
     }
 
+    /**
+     * @param  array<string, mixed>  $parameters
+     * @param  array<string, mixed>  $files
+     */
     public function patch(string $uri, array $parameters = [], array $files = [], ?string $content = null): TestResponse
     {
         return $this->call('PATCH', $uri, $parameters, $files, $content);
     }
 
+    /**
+     * @param  array<string, mixed>  $parameters
+     * @param  array<string, mixed>  $files
+     */
     public function delete(string $uri, array $parameters = [], array $files = [], ?string $content = null): TestResponse
     {
         return $this->call('DELETE', $uri, $parameters, $files, $content);
     }
 
+    /**
+     * @param  array<string, mixed>  $parameters
+     * @param  array<string, mixed>  $files
+     */
     public function call(string $method, string $uri, array $parameters = [], array $files = [], ?string $content = null): TestResponse
     {
         $this->app = $this->createApplication([
@@ -126,10 +158,16 @@ abstract class TestCase extends BaseTestCase
             ],
         ]);
 
-        return $this->createTestResponse($this->app->render($uri, $method), $this->app->request());
+        $response = $this->app->render($uri, $method);
+
+        if ($response === null) {
+            throw new RuntimeException(sprintf('Kirby did not produce a response for [%s %s].', $method, $uri));
+        }
+
+        return $this->createTestResponse($response, $this->app->request());
     }
 
-    protected function createTestResponse($response, $request): TestResponse
+    protected function createTestResponse(Response $response, Request $request): TestResponse
     {
         return TestResponse::fromBaseResponse($response, $request);
     }

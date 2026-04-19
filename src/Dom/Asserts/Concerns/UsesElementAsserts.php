@@ -142,6 +142,9 @@ trait UsesElementAsserts
         return $this;
     }
 
+    /**
+     * @param  array<string, mixed>  $attributes
+     */
     public function doesntContain(string $elementName, array $attributes = []): self
     {
         if (!$attributes) {
@@ -212,6 +215,10 @@ trait UsesElementAsserts
         return $this;
     }
 
+    /**
+     * @param  array<string, mixed>  $expected
+     * @param  array<string, string|null>  $actual
+     */
     private function compareAttributesArrays(array $expected, array $actual): bool
     {
         foreach ($expected as $attribute => $value) {

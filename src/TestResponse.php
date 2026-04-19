@@ -9,13 +9,15 @@ use Derteaser\KirbyTesting\Concerns\AssertsDom;
 use Derteaser\KirbyTesting\Concerns\AssertsStatusCodes;
 use Derteaser\KirbyTesting\Constraints\SeeInOrder;
 use Derteaser\KirbyTesting\TestResponseAssert as PHPUnit;
-use Kirby\Cms\Response;
 use Kirby\Http\Request;
+use Kirby\Http\Response;
 use LogicException;
 use Throwable;
 
 /**
  * @implements ArrayAccess<string, string>
+ *
+ * @phpstan-consistent-constructor
  */
 class TestResponse implements ArrayAccess
 {
@@ -132,8 +134,6 @@ class TestResponse implements ArrayAccess
                 'Response does not offer a file download.' . PHP_EOL .
                 'Disposition [' . trim($contentDisposition[0]) . '] found in header, [attachment] expected.',
             );
-
-            return $this; // unreachable; fail() throws — kept for static analysis
         }
 
         if ($filename === null) {
@@ -146,8 +146,6 @@ class TestResponse implements ArrayAccess
             PHPUnit::withResponse($this)->fail(
                 sprintf('Expected file [%s] is not present in Content-Disposition header.', $filename),
             );
-
-            return $this;
         }
 
         $parts = explode('=', $contentDisposition[1]);
@@ -157,8 +155,6 @@ class TestResponse implements ArrayAccess
                 'Unsupported Content-Disposition header provided.' . PHP_EOL .
                 'Disposition [' . trim($parts[0]) . '] found in header, [filename] expected.',
             );
-
-            return $this;
         }
 
         PHPUnit::withResponse($this)->assertSame(
@@ -177,6 +173,9 @@ class TestResponse implements ArrayAccess
         return $this;
     }
 
+    /**
+     * @param  array<int, string>|string  $value
+     */
     public function assertSee(array|string $value, bool $escape = true): static
     {
         $values = is_array($value) ? $value : [$value];
@@ -192,11 +191,17 @@ class TestResponse implements ArrayAccess
         return $this;
     }
 
+    /**
+     * @param  array<int, string>|string  $value
+     */
     public function assertSeeHtml(array|string $value): static
     {
         return $this->assertSee($value, false);
     }
 
+    /**
+     * @param  array<int, string>  $values
+     */
     public function assertSeeInOrder(array $values, bool $escape = true): static
     {
         if ($escape) {
@@ -208,11 +213,17 @@ class TestResponse implements ArrayAccess
         return $this;
     }
 
+    /**
+     * @param  array<int, string>  $values
+     */
     public function assertSeeHtmlInOrder(array $values): static
     {
         return $this->assertSeeInOrder($values, false);
     }
 
+    /**
+     * @param  array<int, string>|string  $value
+     */
     public function assertSeeText(array|string $value, bool $escape = true): static
     {
         $values = is_array($value) ? $value : [$value];
@@ -230,6 +241,9 @@ class TestResponse implements ArrayAccess
         return $this;
     }
 
+    /**
+     * @param  array<int, string>  $values
+     */
     public function assertSeeTextInOrder(array $values, bool $escape = true): static
     {
         if ($escape) {
@@ -241,6 +255,9 @@ class TestResponse implements ArrayAccess
         return $this;
     }
 
+    /**
+     * @param  array<int, string>|string  $value
+     */
     public function assertDontSee(array|string $value, bool $escape = true): static
     {
         $values = is_array($value) ? $value : [$value];
@@ -256,11 +273,17 @@ class TestResponse implements ArrayAccess
         return $this;
     }
 
+    /**
+     * @param  array<int, string>|string  $value
+     */
     public function assertDontSeeHtml(array|string $value): static
     {
         return $this->assertDontSee($value, false);
     }
 
+    /**
+     * @param  array<int, string>|string  $value
+     */
     public function assertDontSeeText(array|string $value, bool $escape = true): static
     {
         $values = is_array($value) ? $value : [$value];
@@ -279,7 +302,7 @@ class TestResponse implements ArrayAccess
     }
 
     /**
-     * @param list<Throwable> $exceptions
+     * @param  list<Throwable>  $exceptions
      */
     public function withExceptions(array $exceptions): static
     {

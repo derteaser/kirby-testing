@@ -14,9 +14,8 @@ use Symfony\Component\DomCrawler\Crawler;
 /**
  * Fluent DOM assertion scoped to a single node (or the document root).
  *
- * Backed by symfony/dom-crawler on the default libxml parser — masterminds/html5
- * is deliberately not pulled in, so behavior matches the historical DOMDocument
- * pipeline this class replaced.
+ * Backed by symfony/dom-crawler with its default HTML5 parser (masterminds/html5),
+ * so input is parsed the way browsers do.
  */
 abstract class BaseAssert
 {
@@ -32,7 +31,7 @@ abstract class BaseAssert
     protected array $attributes = [];
 
     /**
-     * @param string|Crawler $source Raw HTML to parse, or an already-scoped Crawler.
+     * @param  string|Crawler  $source  Raw HTML to parse, or an already-scoped Crawler.
      */
     public function __construct(string|Crawler $source)
     {
@@ -51,6 +50,8 @@ abstract class BaseAssert
      * because both share the letters in a different arrangement (the prefix
      * check below uses str_starts_with, so ordering is done by listing
      * `doesntContain` first).
+     *
+     * @param  array<int, mixed>  $arguments
      */
     public function __call(string $method, array $arguments): self
     {

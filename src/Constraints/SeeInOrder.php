@@ -18,7 +18,7 @@ final class SeeInOrder extends Constraint
     }
 
     /**
-     * @param array<int, string> $other
+     * @param  array<int, string>  $other
      */
     public function matches($other): bool
     {
@@ -46,7 +46,7 @@ final class SeeInOrder extends Constraint
     }
 
     /**
-     * @param array<int, string> $other
+     * @param  array<int, string>  $other
      */
     public function failureDescription($other): string
     {

@@ -4,6 +4,4 @@ declare(strict_types=1);
 
 namespace Derteaser\KirbyTesting\Dom\Asserts;
 
-final class AssertElement extends BaseAssert
-{
-}
+final class AssertElement extends BaseAssert {}

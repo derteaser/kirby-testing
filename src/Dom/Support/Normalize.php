@@ -17,7 +17,7 @@ final class Normalize
      */
     public static function class(string $class): array
     {
-        $tokens = array_values(array_filter(preg_split('/\s+/', trim($class)) ?: [], static fn(string $t): bool => $t !== ''));
+        $tokens = array_values(array_filter(preg_split('/\s+/', trim($class)) ?: [], static fn (string $t): bool => $t !== ''));
         sort($tokens);
 
         return $tokens;

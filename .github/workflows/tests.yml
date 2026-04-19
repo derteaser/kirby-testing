@@ -1,4 +1,4 @@
-name: Tests
+name: CI
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
         php: ['8.3', '8.4', '8.5']
         deps: [prefer-lowest, prefer-stable]
 
-    name: PHP ${{ matrix.php }} / ${{ matrix.deps }}
+    name: Tests / PHP ${{ matrix.php }} / ${{ matrix.deps }}
 
     steps:
       - uses: actions/checkout@v4
@@ -33,3 +33,26 @@ jobs:
 
       - name: Run tests
         run: composer test
+
+  quality:
+    runs-on: ubuntu-latest
+    name: Quality (Pint + PHPStan)
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: dom, libxml
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Check code style
+        run: composer pint-test
+
+      - name: Run static analysis
+        run: composer stan

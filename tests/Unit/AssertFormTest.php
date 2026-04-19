@@ -12,6 +12,10 @@ function formScope(): AssertForm
 {
     $html = file_get_contents(__DIR__ . '/../Fixtures/html/form.html');
 
+    if ($html === false) {
+        throw new RuntimeException('Missing fixture: form.html');
+    }
+
     return new AssertForm((new Crawler($html))->filter('form')->first());
 }
 
@@ -53,7 +57,7 @@ it('asserts the selected option value via hasValue', function () {
 });
 
 it('rejects non-id selectors for datalist', function () {
-    formScope()->findDatalist('datalist.bogus', fn() => null);
+    formScope()->findDatalist('datalist.bogus', fn () => null);
 })->throws(AssertionFailedError::class, 'Selectors for datalists must be an id');
 
 it('finds a datalist by id and drives AssertDatalist', function () {
