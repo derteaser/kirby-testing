@@ -1,0 +1,34 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - tests/Fixtures/*
+    ignoreErrors:
+        # BaseAssert::__call dispatches has<Attr>, is<El>, find<El>,
+        # contains<El>, doesntContain<El> onto the protected has/is/find/
+        # contains/doesntContain methods. These magic names are unbounded,
+        # so document the pattern here instead of per-call.
+        -
+            message: '#Call to an undefined method [^:]+::(has|is|find|contains|doesntContain)[A-Z]\w*\(\)#'
+            path: tests/*
+        # InteractsWithBlade and InteractsWithLoupe are opt-in public API —
+        # consumers mix them into their own TestCase. Nothing in this repo
+        # uses them, which is correct.
+        -
+            identifier: trait.unused
+            paths:
+                - src/Concerns/InteractsWithBlade.php
+                - src/Concerns/InteractsWithLoupe.php
+        # TestResponseAssert::__call proxies to PHPUnit\Framework\Assert via
+        # dynamic method dispatch (Assert::$name(...)). PHPStan can't see the
+        # ExpectationFailedException through that, so the @throws tag and the
+        # catch block both look "unused" to it — but they're the whole point
+        # of this class.
+        -
+            identifier: throws.unusedType
+            path: src/TestResponseAssert.php
+        -
+            identifier: catch.neverThrown
+            path: src/TestResponseAssert.php

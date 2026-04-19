@@ -18,9 +18,7 @@ use Throwable;
  */
 final class TestResponseAssert
 {
-    private function __construct(private TestResponse $response)
-    {
-    }
+    private function __construct(private TestResponse $response) {}
 
     public static function withResponse(TestResponse $response): self
     {
@@ -28,6 +26,8 @@ final class TestResponseAssert
     }
 
     /**
+     * @param  array<int, mixed>  $arguments
+     *
      * @throws ExpectationFailedException
      */
     public function __call(string $name, array $arguments): void
@@ -39,6 +39,9 @@ final class TestResponseAssert
         }
     }
 
+    /**
+     * @param  array<int, mixed>  $arguments
+     */
     public static function __callStatic(string $name, array $arguments): void
     {
         Assert::$name(...$arguments);

@@ -13,6 +13,9 @@ Consumers extend `Derteaser\KirbyTesting\TestCase` and get `$this->get('/uri')` 
 ```bash
 composer install         # Install dependencies (allows getkirby/composer-installer and pest plugin)
 composer test            # Runs vendor/bin/pest
+composer stan            # PHPStan level 8 (see phpstan.neon.dist)
+composer pint            # Laravel Pint — fix style in place
+composer pint-test       # Laravel Pint — dry-run, exits non-zero on drift
 vendor/bin/pest tests/Unit/AssertElementTest.php   # Single test file
 vendor/bin/pest --filter="hyphenates"              # Single test by description
 ```
@@ -46,7 +49,8 @@ vendor/bin/pest --filter="hyphenates"              # Single test by description
 ## Conventions
 
 - **Target PHP 8.3**, `declare(strict_types=1)` at the top of every source file. The package supports `^8.3 || ^8.4 || ^8.5`, so avoid PHP 8.4-only language features (asymmetric visibility, property hooks, `array_find`/`array_any`, new `mb_*` helpers, `#[\Deprecated]`, lazy-objects API). First-class callable syntax (`$this->foo(...)`) is PHP 8.1+ and fine.
-- **4 spaces, single quotes, 140 char width.** Same Prettier profile as the consumer project — expect a PostToolUse hook to reformat on save.
+- **Formatting is enforced by Laravel Pint** (see `pint.json`, Laravel preset + a few overrides). Run `composer pint` after edits; `composer pint-test` is what CI runs.
+- **Static analysis**: PHPStan level 8 on `src/` and `tests/` (see `phpstan.neon.dist`). Key ignores: the `BaseAssert::__call` magic dispatch patterns (`has<X>` / `is<X>` / `find<X>` / `contains<X>` / `doesntContain<X>`) and the dynamic `Assert::$name(...)` proxy in `TestResponseAssert`. New code must pass level 8 without adding baseline entries.
 - **No `illuminate/support` dependency.** Any code you write must use vanilla PHP or the already-imported libraries (PHPUnit, Symfony DomCrawler/CssSelector). Laravel helpers (`Str::`, `collect()`, `e()`) are out.
 - **`masterminds/html5` is an explicit require (`^2.10`).** Symfony 7.4+ DomCrawler pulls it in anyway and makes the HTML5 parser the default in `new Crawler($html)`; the explicit pin keeps the floor free of PHP 8.4 nullability deprecations from html5 < 2.10. If you ever need libxml-only behaviour, pass `$useHtml5Parser: false` to the Crawler constructor — but the consumer suite passes with HTML5 parsing, so prefer not to.
 - **Symfony peer-dep**: `symfony/dom-crawler` and `symfony/css-selector` are `^7.4 || ^8.0`. The Symfony 8 breaking change to note is that `Crawler::__construct`'s `$useHtml5Parser` argument is gone — don't pass it.

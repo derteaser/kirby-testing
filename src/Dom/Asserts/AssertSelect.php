@@ -50,6 +50,9 @@ final class AssertSelect extends BaseAssert
         return $this;
     }
 
+    /**
+     * @param  array<int, string>  $values
+     */
     public function hasValues(array $values): self
     {
         $options = $this->filterAll('option[selected="selected"]');

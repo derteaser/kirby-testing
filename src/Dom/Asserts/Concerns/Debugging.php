@@ -13,7 +13,7 @@ trait Debugging
 {
     public function dump(): self
     {
-        $formatted = (new HtmlFormatter())->format($this->getOuterHtml());
+        $formatted = (new HtmlFormatter)->format($this->getOuterHtml());
 
         if (function_exists('dump')) {
             dump($formatted);

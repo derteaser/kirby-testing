@@ -20,7 +20,9 @@
     "symfony/dom-crawler": "^7.4 || ^8.0"
   },
   "require-dev": {
-    "pestphp/pest": "^4.0"
+    "laravel/pint": "^1.18",
+    "pestphp/pest": "^4.0",
+    "phpstan/phpstan": "^2.1"
   },
   "suggest": {
     "loupe/loupe": "Enables the InteractsWithLoupe trait for fixture-backed search indexes (^0.13)."
@@ -43,6 +45,9 @@
     "sort-packages": true
   },
   "scripts": {
-    "test": "pest"
+    "test": "pest",
+    "stan": "phpstan analyse",
+    "pint": "pint",
+    "pint-test": "pint --test"
   }
 }

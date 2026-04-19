@@ -8,7 +8,13 @@ use Symfony\Component\DomCrawler\Crawler;
 
 function basicHtml(): string
 {
-    return file_get_contents(__DIR__ . '/../Fixtures/html/basic.html');
+    $html = file_get_contents(__DIR__ . '/../Fixtures/html/basic.html');
+
+    if ($html === false) {
+        throw new RuntimeException('Missing fixture: basic.html');
+    }
+
+    return $html;
 }
 
 function scopedTo(string $selector): AssertElement
