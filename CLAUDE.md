@@ -45,11 +45,12 @@ vendor/bin/pest --filter="hyphenates"              # Single test by description
 
 ## Conventions
 
-- **PHP 8.4**, `declare(strict_types=1)` at the top of every source file.
+- **Target PHP 8.3**, `declare(strict_types=1)` at the top of every source file. The package supports `^8.3 || ^8.4 || ^8.5`, so avoid PHP 8.4-only language features (asymmetric visibility, property hooks, `array_find`/`array_any`, new `mb_*` helpers, `#[\Deprecated]`, lazy-objects API). First-class callable syntax (`$this->foo(...)`) is PHP 8.1+ and fine.
 - **4 spaces, single quotes, 140 char width.** Same Prettier profile as the consumer project — expect a PostToolUse hook to reformat on save.
 - **No `illuminate/support` dependency.** Any code you write must use vanilla PHP or the already-imported libraries (PHPUnit, Symfony DomCrawler/CssSelector). Laravel helpers (`Str::`, `collect()`, `e()`) are out.
-- **`symfony/dom-crawler` 7.4+ pulls in `masterminds/html5` as a hard dep.** The HTML5 parser is the default and drives behaviour in `new Crawler($html)`. If you ever need libxml-only behaviour, pass `$useHtml5Parser: false` to the Crawler constructor — but the consumer suite passes with HTML5 parsing, so prefer not to.
-- **Kirby peer-dep**: `getkirby/cms: ^5.1`. Keep `TestResponse` / `TestCase` coupled to `Kirby\Cms\App`, `Kirby\Cms\Response`, `Kirby\Http\Request` only. Do not reach into `Kirby\Toolkit\*` again.
+- **`masterminds/html5` is an explicit require (`^2.10`).** Symfony 7.4+ DomCrawler pulls it in anyway and makes the HTML5 parser the default in `new Crawler($html)`; the explicit pin keeps the floor free of PHP 8.4 nullability deprecations from html5 < 2.10. If you ever need libxml-only behaviour, pass `$useHtml5Parser: false` to the Crawler constructor — but the consumer suite passes with HTML5 parsing, so prefer not to.
+- **Symfony peer-dep**: `symfony/dom-crawler` and `symfony/css-selector` are `^7.4 || ^8.0`. The Symfony 8 breaking change to note is that `Crawler::__construct`'s `$useHtml5Parser` argument is gone — don't pass it.
+- **Kirby peer-dep**: `getkirby/cms: ^5.0`. Keep `TestResponse` / `TestCase` coupled to `Kirby\Cms\App`, `Kirby\Cms\Response`, `Kirby\Http\Request` only. Do not reach into `Kirby\Toolkit\*` again.
 
 ## Notable invariants to preserve
 

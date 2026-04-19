@@ -77,13 +77,14 @@ it('renders the home page', function () {
 
 ## Behavioral notes
 
-- The DOM assertion layer uses `symfony/dom-crawler` on the default libxml parser. `masterminds/html5` is intentionally **not** a dependency — we stay on libxml to minimise parser drift from hand-rolled `DOMDocument`-based code.
+- The DOM assertion layer uses `symfony/dom-crawler` with its default HTML5 parser (`masterminds/html5`), which matches how browsers parse real-world markup.
 - `Normalize::class()` compares class attributes as unordered sets.
 - Boolean-only attributes (`required`, `readonly`, `disabled`, …) are matched by presence, not value.
 - `Normalize::text()` collapses whitespace and vertical space when comparing text.
 
 ## Requirements
 
-- PHP 8.4
-- Kirby 5.1+
-- PHPUnit 11 or 12
+- PHP 8.3, 8.4, or 8.5
+- Kirby 5.x
+- Symfony DomCrawler/CssSelector 7.4 or 8
+- PHPUnit 11, 12, or 13
