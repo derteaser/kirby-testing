@@ -1,6 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
-  ]
+    "github>derteaser/renovate-presets",
+    "github>derteaser/renovate-presets:kirby",
+    ":preserveSemverRanges"
+  ],
+  "lockFileMaintenance": {
+    "enabled": false
+  }
 }
