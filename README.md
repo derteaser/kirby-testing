@@ -5,8 +5,10 @@ Fluent HTTP + DOM test assertions for Kirby 5 and 6 projects, built on Pest/PHPU
 ## Install
 
 ```bash
-composer require --dev derteaser/kirby-testing
+composer require --dev derteaser/kirby-testing pestphp/pest
 ```
+
+The examples below use [Pest](https://pestphp.com). Pest isn't a dependency of this package: `TestCase` extends PHPUnit's `TestCase`, so plain PHPUnit test classes work too. Leave out `pestphp/pest` if you don't use it.
 
 ## Usage
 
@@ -88,3 +90,4 @@ it('renders the home page', function () {
 - Kirby 5.x or 6.x
 - Symfony DomCrawler/CssSelector 7.4 or 8
 - PHPUnit 11, 12, or 13
+- Optional: Pest 4 (PHP 8.3+, PHPUnit 12) or Pest 5 (PHP 8.4+, PHPUnit 13)
