@@ -4,7 +4,7 @@ Notes for Claude Code working in this repository.
 
 ## Project
 
-Reusable Composer package providing fluent HTTP + DOM test assertions for Kirby 5 projects. Extracted from `blaue-funken-kirby` so the same infrastructure can be shared across multiple Kirby projects.
+Reusable Composer package providing fluent HTTP + DOM test assertions for Kirby 5 and 6 projects. Extracted from `blaue-funken-kirby` so the same infrastructure can be shared across multiple Kirby projects.
 
 Consumers extend `Derteaser\KirbyTesting\TestCase` and get `$this->get('/uri')` + chainable DOM assertions on the response.
 
@@ -54,7 +54,7 @@ vendor/bin/pest --filter="hyphenates"              # Single test by description
 - **No `illuminate/support` dependency.** Any code you write must use vanilla PHP or the already-imported libraries (PHPUnit, Symfony DomCrawler/CssSelector). Laravel helpers (`Str::`, `collect()`, `e()`) are out.
 - **`masterminds/html5` is an explicit require (`^2.10`).** Symfony 7.4+ DomCrawler pulls it in anyway and makes the HTML5 parser the default in `new Crawler($html)`; the explicit pin keeps the floor free of PHP 8.4 nullability deprecations from html5 < 2.10. If you ever need libxml-only behaviour, pass `$useHtml5Parser: false` to the Crawler constructor — but the consumer suite passes with HTML5 parsing, so prefer not to.
 - **Symfony peer-dep**: `symfony/dom-crawler` and `symfony/css-selector` are `^7.4 || ^8.0`. The Symfony 8 breaking change to note is that `Crawler::__construct`'s `$useHtml5Parser` argument is gone — don't pass it.
-- **Kirby peer-dep**: `getkirby/cms: ^5.0`. Keep `TestResponse` / `TestCase` coupled to `Kirby\Cms\App`, `Kirby\Cms\Response`, `Kirby\Http\Request` only. Do not reach into `Kirby\Toolkit\*` again.
+- **Kirby peer-dep**: `getkirby/cms: ^5.0 || ^6.0` (CI tests both majors). Keep `TestResponse` / `TestCase` coupled to `Kirby\Cms\App`, `Kirby\Cms\Response`, `Kirby\Http\Request` only. Do not reach into `Kirby\Toolkit\*` again.
 
 ## Notable invariants to preserve
 

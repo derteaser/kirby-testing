@@ -1,6 +1,6 @@
 # derteaser/kirby-testing
 
-Fluent HTTP + DOM test assertions for Kirby 5 projects, built on Pest/PHPUnit and `symfony/dom-crawler`.
+Fluent HTTP + DOM test assertions for Kirby 5 and 6 projects, built on Pest/PHPUnit and `symfony/dom-crawler`.
 
 ## Install
 
@@ -85,6 +85,6 @@ it('renders the home page', function () {
 ## Requirements
 
 - PHP 8.3, 8.4, or 8.5
-- Kirby 5.x
+- Kirby 5.x or 6.x
 - Symfony DomCrawler/CssSelector 7.4 or 8
 - PHPUnit 11, 12, or 13

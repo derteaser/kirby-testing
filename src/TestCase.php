@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 use RuntimeException;
 
 /**
- * Base test case for feature-style tests against a Kirby 5 project.
+ * Base test case for feature-style tests against a Kirby 5 or 6 project.
  *
  * Subclasses must implement `roots()` to point at the project's fixtures and
  * storage. Each HTTP simulation (`get/post/put/patch/delete/call`) creates a

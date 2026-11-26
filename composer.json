@@ -1,6 +1,6 @@
 {
   "name": "derteaser/kirby-testing",
-  "description": "Fluent HTTP + DOM test assertions for Kirby 5 projects using Pest/PHPUnit.",
+  "description": "Fluent HTTP + DOM test assertions for Kirby 5 and 6 projects using Pest/PHPUnit.",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -13,7 +13,7 @@
     "php": "^8.3 || ^8.4 || ^8.5",
     "ext-dom": "*",
     "ext-libxml": "*",
-    "getkirby/cms": "^5.0",
+    "getkirby/cms": "^5.0 || ^6.0",
     "masterminds/html5": "^2.10",
     "phpunit/phpunit": "^11.0 || ^12.0 || ^13.0",
     "symfony/css-selector": "^7.4 || ^8.0",
